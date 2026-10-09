@@ -5,8 +5,8 @@ A full-stack fintech application tracking the complete lifecycle of collected ca
 
 ---
 
-## 🌐 Live Demo
-**Live App**: [https://cashgrid-5cfd4.web.app/](https://cashgrid-5cfd4.web.app/)
+🌐 Live Demo
+Live App: [https://cashgrid-5cfd4.web.app/](https://cashgrid-5cfd4.web.app/)
 
 ---
 
