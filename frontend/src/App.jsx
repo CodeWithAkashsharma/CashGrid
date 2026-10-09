@@ -288,7 +288,7 @@ function App() {
               </div>
             </div>
 
-            {user && user.role === 'customer' && (
+            {user && !['super_admin', 'admin', 'agent'].includes(user.role) && (
               <div className="desktop-customer-tabs">
                 {['Dashboard', 'Payments', 'History'].map(tab => (
                   <div 
@@ -317,9 +317,11 @@ function App() {
             )}
 
             {/* Mobile Drawer Dropdown for Customer Portal */}
-            {user && user.role === 'customer' && mobileMenuOpen && (
+            {user && mobileMenuOpen && (
               <div className="mobile-customer-drawer">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {!['super_admin', 'admin', 'agent'].includes(user.role) && (
+                    <>
                   <div style={{ fontSize: '0.72rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px', paddingLeft: '6px' }}>
                     Customer Portal Menu
                   </div>
@@ -355,14 +357,46 @@ function App() {
                         <span style={{ marginLeft: 'auto', fontSize: '0.75rem', background: 'rgba(255,255,255,0.25)', padding: '2px 8px', borderRadius: '12px' }}>Active</span>
                       )}
                     </button>
-                  ))}
+                      ))}
+                    </>
+                  )}
+                  <div style={{ fontSize: '0.72rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px', paddingLeft: '6px', marginTop: !['super_admin', 'admin', 'agent'].includes(user.role) ? '12px' : '0' }}>
+                    Account Actions
+                  </div>
+                  <button onClick={() => { setShowNotifications(!showNotifications); setMobileMenuOpen(false); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '11px 16px', background: 'rgba(255,255,255,0.06)', color: 'white', borderRadius: '10px', fontWeight: '500', fontSize: '0.92rem', border: 'none', cursor: 'pointer' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                      </svg>
+                      <span>Notifications</span>
+                    </div>
+                    {((user?.role === 'agent' && agentNotifs.some(n => n.unread)) || (user?.role === 'admin' && adminNotifs.some(n => n.unread)) || (user?.role === 'super_admin' && superAdminNotifs.some(n => n.unread)) || (user?.role === 'customer' && hasUnreadNotifs)) && (
+                      <span style={{ background: '#EF4444', width: '8px', height: '8px', borderRadius: '50%', display: 'inline-block', position: 'absolute', right: '16px' }}></span>
+                    )}
+                  </button>
+                  <button onClick={() => window.location.reload()} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '11px 16px', background: 'rgba(255,255,255,0.06)', color: 'white', borderRadius: '10px', fontWeight: '500', fontSize: '0.92rem', border: 'none', cursor: 'pointer' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                    <span>Refresh Dashboard</span>
+                  </button>
+                  <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '11px 16px', background: 'rgba(239,68,68,0.15)', color: '#EF4444', borderRadius: '10px', fontWeight: '700', fontSize: '0.92rem', border: 'none', cursor: 'pointer' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M10 22H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h5"></path>
+                      <polyline points="17 16 21 12 17 8"></polyline>
+                      <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Log Out</span>
+                  </button>
                 </div>
               </div>
             )}
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              {/* Burger Menu Button for Customer Portal */}
-              {user && user.role === 'customer' && (
+              {/* Burger Menu Button */}
+              {user && (
                 <button
                   type="button"
                   className="mobile-burger-btn"
@@ -385,7 +419,8 @@ function App() {
                 </button>
               )}
 
-              <div ref={notifRef} style={{ position: 'relative' }}>
+              <div className="desktop-only-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div ref={notifRef} style={{ position: 'relative' }}>
                 <div 
                   onClick={() => setShowNotifications(!showNotifications)}
                   style={{ cursor: 'pointer', color: '#CBD5E1', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', transition: 'all 0.2s', border: '1px solid rgba(255,255,255,0.05)' }}
@@ -401,13 +436,46 @@ function App() {
                   )}
                 </div>
                 
-                {showNotifications && (
-                  <div style={{ position: 'absolute', top: '50px', right: 0, width: user?.role === 'agent' ? '360px' : '340px', maxWidth: 'calc(100vw - 20px)', background: 'white', borderRadius: '12px', boxShadow: '0 12px 30px rgba(0,0,0,0.15)', border: '1px solid #E2E8F0', overflow: 'hidden', zIndex: 1000 }}>
+                
+              </div>
+
+              <button 
+                onClick={() => window.location.reload()} 
+                style={{ background: 'rgba(255,255,255,0.05)', color: '#F8FAFC', border: '1px solid rgba(255,255,255,0.1)', padding: '8px 16px', borderRadius: '8px', fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '500', transition: 'all 0.2s' }} 
+                onMouseOver={(e) => { e.currentTarget.style.background='rgba(255,255,255,0.15)'; e.currentTarget.style.transform='translateY(-1px)'; }} 
+                onMouseOut={(e) => { e.currentTarget.style.background='rgba(255,255,255,0.05)'; e.currentTarget.style.transform='translateY(0)'; }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                </svg>
+                <span className="nav-btn-text">Refresh</span>
+              </button>
+              
+              <button 
+                onClick={handleLogout} 
+                style={{ background: 'rgba(239,68,68,0.15)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.3)', padding: '6px 14px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', transition: 'all 0.2s', fontWeight: '700', letterSpacing: '0.5px' }} 
+                onMouseOver={(e) => { e.currentTarget.style.background='rgba(239,68,68,0.25)'; e.currentTarget.style.color='#FCA5A5'; e.currentTarget.style.transform='scale(1.05)'; }} 
+                onMouseOut={(e) => { e.currentTarget.style.background='rgba(239,68,68,0.15)'; e.currentTarget.style.color='#EF4444'; e.currentTarget.style.transform='scale(1)'; }} 
+                title="Logout"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M10 22H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h5"></path>
+                  <polyline points="17 16 21 12 17 8"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span className="nav-btn-text">EXIT</span>
+              </button>
+              </div>
+            </div>
+          
+{showNotifications && (
+                  <div className="notification-dropdown" style={{ position: 'absolute', top: '100%', right: '10px', width: user?.role === 'agent' ? '360px' : '340px', maxWidth: 'calc(100vw - 20px)', background: 'white', borderRadius: '12px', boxShadow: '0 12px 30px rgba(0,0,0,0.15)', border: '1px solid #E2E8F0', overflow: 'hidden', zIndex: 1000 }}>
                     {user?.role === 'agent' ? (
                       <>
-                        <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <h4 style={{ margin: 0, color: '#0F172A', fontSize: '0.95rem', fontWeight: '700' }}>Notifications</h4>
+                        <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', justifyContent: 'center', position: 'relative', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', flex: 1, paddingRight: '60px' }}>
+                            <h4 style={{ textAlign: 'center', margin: 0, color: '#0F172A', fontSize: '0.95rem', fontWeight: '700' }}>Notifications</h4>
                             {agentNotifs.filter(n => n.unread).length > 0 && (
                               <span style={{ background: '#FEE2E2', color: '#DC2626', padding: '1px 7px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: '700' }}>
                                 {agentNotifs.filter(n => n.unread).length} New
@@ -416,7 +484,7 @@ function App() {
                           </div>
                           <button 
                             onClick={() => setAgentNotifs(agentNotifs.map(n => ({ ...n, unread: false })))} 
-                            style={{ background: 'none', border: 'none', color: '#2563EB', fontSize: '0.75rem', cursor: 'pointer', padding: 0, fontWeight: '600' }}
+                            style={{ position: 'absolute', right: '16px',  background: 'none', border: 'none', color: '#2563EB', fontSize: '0.75rem', cursor: 'pointer', padding: 0, fontWeight: '600' }}
                           >
                             Mark all read
                           </button>
@@ -436,7 +504,7 @@ function App() {
                                   transition: 'background 0.2s'
                                 }}
                               >
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', alignItems: 'flex-start', marginBottom: '4px' }}>
                                   <span style={{ fontWeight: '700', fontSize: '0.82rem', color: notif.category === 'rejection' ? '#DC2626' : '#0F172A' }}>
                                     {notif.title}
                                   </span>
@@ -456,9 +524,9 @@ function App() {
                       </>
                     ) : user?.role === 'super_admin' ? (
                       <>
-                        <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <h4 style={{ margin: 0, color: '#0F172A', fontSize: '0.95rem', fontWeight: '700' }}>Super Admin Center</h4>
+                        <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', justifyContent: 'center', position: 'relative', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', flex: 1, paddingRight: '60px' }}>
+                            <h4 style={{ textAlign: 'center', margin: 0, color: '#0F172A', fontSize: '0.95rem', fontWeight: '700' }}>Super Admin Center</h4>
                             {superAdminNotifs.filter(n => n.unread).length > 0 && (
                               <span style={{ background: '#EDE9FE', color: '#7C3AED', padding: '1px 7px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: '700' }}>
                                 {superAdminNotifs.filter(n => n.unread).length} New
@@ -467,7 +535,7 @@ function App() {
                           </div>
                           <button 
                             onClick={() => setSuperAdminNotifs(superAdminNotifs.map(n => ({ ...n, unread: false })))} 
-                            style={{ background: 'none', border: 'none', color: '#7C3AED', fontSize: '0.75rem', cursor: 'pointer', padding: 0, fontWeight: '600' }}
+                            style={{ position: 'absolute', right: '16px',  background: 'none', border: 'none', color: '#7C3AED', fontSize: '0.75rem', cursor: 'pointer', padding: 0, fontWeight: '600' }}
                           >
                             Mark all read
                           </button>
@@ -479,7 +547,7 @@ function App() {
                               onClick={() => setSuperAdminNotifs(superAdminNotifs.map(n => n.id === notif.id ? { ...n, unread: false } : n))}
                               style={{ padding: '14px 16px', borderBottom: '1px solid #F1F5F9', background: notif.unread ? '#FAF5FF' : 'white', cursor: 'pointer' }}
                             >
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', alignItems: 'center', marginBottom: '4px' }}>
                                 <p style={{ margin: 0, color: '#0F172A', fontSize: '0.85rem', fontWeight: '600' }}>{notif.title}</p>
                                 <span style={{ background: notif.badgeBg, color: notif.badgeColor, padding: '2px 6px', borderRadius: '4px', fontSize: '0.65rem', fontWeight: '700' }}>{notif.badge}</span>
                               </div>
@@ -493,9 +561,9 @@ function App() {
                       </>
                     ) : user?.role === 'admin' ? (
                       <>
-                        <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <h4 style={{ margin: 0, color: '#0F172A', fontSize: '0.95rem', fontWeight: '700' }}>Branch Admin Alerts</h4>
+                        <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', justifyContent: 'center', position: 'relative', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', flex: 1, paddingRight: '60px' }}>
+                            <h4 style={{ textAlign: 'center', margin: 0, color: '#0F172A', fontSize: '0.95rem', fontWeight: '700' }}>Branch Admin Alerts</h4>
                             {adminNotifs.filter(n => n.unread).length > 0 && (
                               <span style={{ background: '#EFF6FF', color: '#2563EB', padding: '1px 7px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: '700' }}>
                                 {adminNotifs.filter(n => n.unread).length} New
@@ -504,7 +572,7 @@ function App() {
                           </div>
                           <button 
                             onClick={() => setAdminNotifs(adminNotifs.map(n => ({ ...n, unread: false })))} 
-                            style={{ background: 'none', border: 'none', color: '#2563EB', fontSize: '0.75rem', cursor: 'pointer', padding: 0, fontWeight: '600' }}
+                            style={{ position: 'absolute', right: '16px',  background: 'none', border: 'none', color: '#2563EB', fontSize: '0.75rem', cursor: 'pointer', padding: 0, fontWeight: '600' }}
                           >
                             Mark all read
                           </button>
@@ -516,7 +584,7 @@ function App() {
                               onClick={() => setAdminNotifs(adminNotifs.map(n => n.id === notif.id ? { ...n, unread: false } : n))}
                               style={{ padding: '14px 16px', borderBottom: '1px solid #F1F5F9', background: notif.unread ? '#F0F9FF' : 'white', cursor: 'pointer' }}
                             >
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', alignItems: 'center', marginBottom: '4px' }}>
                                 <p style={{ margin: 0, color: '#0F172A', fontSize: '0.85rem', fontWeight: '600' }}>{notif.title}</p>
                                 <span style={{ background: notif.badgeBg, color: notif.badgeColor, padding: '2px 6px', borderRadius: '4px', fontSize: '0.65rem', fontWeight: '700' }}>{notif.badge}</span>
                               </div>
@@ -530,9 +598,9 @@ function App() {
                       </>
                     ) : (
                       <>
-                        <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <h4 style={{ margin: 0, color: '#0F172A', fontSize: '0.95rem', fontWeight: '700' }}>Notifications</h4>
+                        <div style={{ padding: '14px 18px', borderBottom: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', justifyContent: 'center', position: 'relative', alignItems: 'center' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', flex: 1, paddingRight: '60px' }}>
+                            <h4 style={{ textAlign: 'center', margin: 0, color: '#0F172A', fontSize: '0.95rem', fontWeight: '700' }}>Notifications</h4>
                             {hasUnreadNotifs && (
                               <span style={{ background: '#EFF6FF', color: '#2563EB', padding: '1px 7px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: '700' }}>
                                 1 New
@@ -541,7 +609,7 @@ function App() {
                           </div>
                           <button 
                             onClick={() => { setHasUnreadNotifs(false); localStorage.setItem('notifsRead', 'true'); }} 
-                            style={{ background: 'none', border: 'none', color: '#2563EB', fontSize: '0.75rem', cursor: 'pointer', padding: 0, fontWeight: '600' }}
+                            style={{ position: 'absolute', right: '16px',  background: 'none', border: 'none', color: '#2563EB', fontSize: '0.75rem', cursor: 'pointer', padding: 0, fontWeight: '600' }}
                           >
                             Mark all read
                           </button>
@@ -589,37 +657,7 @@ function App() {
                     )}
                   </div>
                 )}
-              </div>
-
-              <button 
-                onClick={() => window.location.reload()} 
-                style={{ background: 'rgba(255,255,255,0.05)', color: '#F8FAFC', border: '1px solid rgba(255,255,255,0.1)', padding: '8px 16px', borderRadius: '8px', fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '500', transition: 'all 0.2s' }} 
-                onMouseOver={(e) => { e.currentTarget.style.background='rgba(255,255,255,0.15)'; e.currentTarget.style.transform='translateY(-1px)'; }} 
-                onMouseOut={(e) => { e.currentTarget.style.background='rgba(255,255,255,0.05)'; e.currentTarget.style.transform='translateY(0)'; }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="23 4 23 10 17 10"></polyline>
-                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                </svg>
-                <span className="nav-btn-text">Refresh</span>
-              </button>
-              
-              <button 
-                onClick={handleLogout} 
-                style={{ background: 'rgba(239,68,68,0.15)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.3)', padding: '6px 14px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', transition: 'all 0.2s', fontWeight: '700', letterSpacing: '0.5px' }} 
-                onMouseOver={(e) => { e.currentTarget.style.background='rgba(239,68,68,0.25)'; e.currentTarget.style.color='#FCA5A5'; e.currentTarget.style.transform='scale(1.05)'; }} 
-                onMouseOut={(e) => { e.currentTarget.style.background='rgba(239,68,68,0.15)'; e.currentTarget.style.color='#EF4444'; e.currentTarget.style.transform='scale(1)'; }} 
-                title="Logout"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M10 22H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h5"></path>
-                  <polyline points="17 16 21 12 17 8"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-                <span className="nav-btn-text">EXIT</span>
-              </button>
-            </div>
-          </nav>
+</nav>
         )}
         <Routes>
           <Route path="/login" element={!token ? <Login onLogin={handleLogin} /> : <Navigate to="/" />} />
