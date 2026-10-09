@@ -2036,10 +2036,10 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
                   description="You currently don't have any active loans with CashGrid. When a loan is approved, it will appear here." 
                 />
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '30px' }}>
-                <div className="card" style={{ padding: '20px', position: 'relative' }}>
+                <div className="customer-stats-scroll-container">
+                <div className="card customer-stat-card" style={{ padding: 'clamp(14px, 3vw, 20px)', position: 'relative' }}>
                   <h3 style={{ color: '#64748B', fontSize: '0.85rem', fontWeight: '500', marginBottom: '8px', paddingRight: '45px', lineHeight: '1.4' }}>Total Loan (Incl. Interest)</h3>
-                  <div style={{ margin: 0, color: '#0F172A', fontSize: '2rem', fontWeight: '700', letterSpacing: '-0.5px' }}>₹{(myLoan.amount * 1.1).toLocaleString()}</div>
+                  <div style={{ margin: 0, color: '#0F172A', fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: '700', letterSpacing: '-0.5px' }}>₹{(myLoan.amount * 1.1).toLocaleString()}</div>
                   <div style={{ position: 'absolute', top: '20px', right: '20px', background: '#F1F5F9', color: '#475569', width: '38px', height: '38px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
                   </div>
@@ -2049,27 +2049,25 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
                   </div>
                 </div>
 
-                <div className="card" style={{ padding: '20px', position: 'relative' }}>
+                <div className="card customer-stat-card" style={{ padding: 'clamp(14px, 3vw, 20px)', position: 'relative' }}>
                   <h3 style={{ color: '#64748B', fontSize: '0.85rem', fontWeight: '500', marginBottom: '8px', paddingRight: '45px', lineHeight: '1.4' }}>Total Paid Back</h3>
-                  <div style={{ margin: 0, color: '#059669', fontSize: '2rem', fontWeight: '700', letterSpacing: '-0.5px' }}>₹{paidBack.toLocaleString()}</div>
+                  <div style={{ margin: 0, color: '#059669', fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: '700', letterSpacing: '-0.5px' }}>₹{paidBack.toLocaleString()}</div>
                   <div style={{ position: 'absolute', top: '20px', right: '20px', background: '#D1FAE5', color: '#059669', width: '38px', height: '38px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   </div>
-
                 </div>
 
-                <div className="card" style={{ padding: '20px', position: 'relative' }}>
+                <div className="card customer-stat-card" style={{ padding: 'clamp(14px, 3vw, 20px)', position: 'relative' }}>
                   <h3 style={{ color: '#64748B', fontSize: '0.85rem', fontWeight: '500', marginBottom: '8px', paddingRight: '45px', lineHeight: '1.4' }}>Outstanding Amount</h3>
-                  <div style={{ margin: 0, color: '#0F172A', fontSize: '2rem', fontWeight: '700', letterSpacing: '-0.5px' }}>₹{myLoan.outstanding_amount?.toLocaleString()}</div>
+                  <div style={{ margin: 0, color: '#0F172A', fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: '700', letterSpacing: '-0.5px' }}>₹{myLoan.outstanding_amount?.toLocaleString()}</div>
                   <div style={{ position: 'absolute', top: '20px', right: '20px', background: '#FEF3C7', color: '#D97706', width: '38px', height: '38px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                   </div>
-
                 </div>
 
-                <div className="card" style={{ padding: '20px', position: 'relative' }}>
+                <div className="card customer-stat-card" style={{ padding: 'clamp(14px, 3vw, 20px)', position: 'relative' }}>
                   <h3 style={{ color: '#64748B', fontSize: '0.85rem', fontWeight: '500', marginBottom: '8px', paddingRight: '45px', lineHeight: '1.4' }}>Coming Up Next</h3>
-                  <div style={{ margin: 0, color: '#0F172A', fontSize: '2rem', fontWeight: '700', letterSpacing: '-0.5px' }}>₹5,000</div>
+                  <div style={{ margin: 0, color: '#0F172A', fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: '700', letterSpacing: '-0.5px' }}>₹5,000</div>
                   <div style={{ position: 'absolute', top: '20px', right: '20px', background: '#EFF6FF', color: '#2563EB', width: '38px', height: '38px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                   </div>
@@ -2144,8 +2142,8 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
                       </div>
                     </div>
                     
-                    <div style={{ overflowY: 'auto', maxHeight: '350px' }}>
-                      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <div style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: '350px', WebkitOverflowScrolling: 'touch' }}>
+                      <table style={{ width: '100%', minWidth: '520px', borderCollapse: 'collapse' }}>
                         <thead style={{ position: 'sticky', top: 0, background: 'white', zIndex: 1, boxShadow: '0 1px 0 #E2E8F0' }}>
                           <tr>
                             <th style={{ padding: '12px 24px', textAlign: 'left', fontSize: '0.8rem', color: '#64748B' }}>DATE & TIME</th>
@@ -2198,7 +2196,7 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
               </div>
               
               <div style={{ marginTop: '30px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '16px', marginBottom: '20px' }}>
                   <div>
                     <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', fontSize: '0.9rem' }}>Select EMI Installment</label>
                     <select 
@@ -2344,35 +2342,35 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
                 <span style={{ background: '#ECFDF5', color: '#059669', padding: '4px 12px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: '600' }}>Active</span>
               </div>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px', background: '#F8FAFC', padding: '20px', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
-                <div>
+              <div className="loan-details-grid">
+                <div className="loan-details-section">
                   <p style={{ color: '#64748B', fontSize: '0.85rem', margin: '0 0 5px 0' }}>Borrower Name</p>
-                  <p style={{ fontWeight: '600', margin: '0 0 20px 0', color: '#0F172A' }}>{user?.username || 'Rajesh Kumar'}</p>
+                  <p style={{ fontWeight: '600', margin: '0 0 16px 0', color: '#0F172A' }}>{user?.username || 'Rajesh Kumar'}</p>
                   
                   <p style={{ color: '#64748B', fontSize: '0.85rem', margin: '0 0 5px 0' }}>Principal Amount</p>
-                  <p style={{ fontWeight: '600', margin: '0 0 20px 0', color: '#0F172A' }}>₹{myLoan.amount?.toLocaleString()}</p>
+                  <p style={{ fontWeight: '600', margin: '0 0 16px 0', color: '#0F172A' }}>₹{myLoan.amount?.toLocaleString()}</p>
                   
                   <p style={{ color: '#64748B', fontSize: '0.85rem', margin: '0 0 5px 0' }}>Issuing Bank</p>
                   <p style={{ fontWeight: '600', margin: 0, color: '#0F172A' }}>HDFC Bank Ltd.</p>
                 </div>
                 
-                <div>
+                <div className="loan-details-section">
                   <p style={{ color: '#64748B', fontSize: '0.85rem', margin: '0 0 5px 0' }}>Disbursement Date</p>
-                  <p style={{ fontWeight: '600', margin: '0 0 20px 0', color: '#0F172A' }}>Jan 15, 2026</p>
+                  <p style={{ fontWeight: '600', margin: '0 0 16px 0', color: '#0F172A' }}>Jan 15, 2026</p>
                   
                   <p style={{ color: '#64748B', fontSize: '0.85rem', margin: '0 0 5px 0' }}>Interest Rate</p>
-                  <p style={{ fontWeight: '600', margin: '0 0 20px 0', color: '#0F172A' }}>10.0% p.a.</p>
+                  <p style={{ fontWeight: '600', margin: '0 0 16px 0', color: '#0F172A' }}>10.0% p.a.</p>
                   
                   <p style={{ color: '#64748B', fontSize: '0.85rem', margin: '0 0 5px 0' }}>Bank Branch</p>
                   <p style={{ fontWeight: '600', margin: 0, color: '#0F172A' }}>South Extension #03</p>
                 </div>
 
-                <div>
+                <div className="loan-details-section">
                   <p style={{ color: '#64748B', fontSize: '0.85rem', margin: '0 0 5px 0' }}>Expected End Date</p>
-                  <p style={{ fontWeight: '600', margin: '0 0 20px 0', color: '#0F172A' }}>Jan 15, 2027</p>
+                  <p style={{ fontWeight: '600', margin: '0 0 16px 0', color: '#0F172A' }}>Jan 15, 2027</p>
                   
                   <p style={{ color: '#64748B', fontSize: '0.85rem', margin: '0 0 5px 0' }}>Total (Incl. Interest)</p>
-                  <p style={{ fontWeight: '600', margin: '0 0 20px 0', color: '#2563EB', fontSize: '1.1rem' }}>₹{(myLoan.amount * 1.1).toLocaleString()}</p>
+                  <p style={{ fontWeight: '600', margin: '0 0 16px 0', color: '#2563EB', fontSize: '1.1rem' }}>₹{(myLoan.amount * 1.1).toLocaleString()}</p>
 
                   <p style={{ color: '#64748B', fontSize: '0.85rem', margin: '0 0 5px 0' }}>Disbursement Account</p>
                   <p style={{ fontWeight: '600', margin: 0, color: '#0F172A' }}>XXXX-XXXX-8921</p>
@@ -2382,11 +2380,12 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
           )}
 
           {customerTab === 'Payments' && myLoan && (
-            <div className="card" style={{ padding: '0' }}>
-              <div style={{ padding: '24px', borderBottom: '1px solid #E2E8F0' }}>
+            <div className="card" style={{ padding: '0', overflow: 'hidden' }}>
+              <div style={{ padding: '20px 24px', borderBottom: '1px solid #E2E8F0' }}>
                 <h3 style={{ margin: '0 0 5px 0', fontSize: '1.1rem' }}>Repayment Schedule</h3>
               </div>
-              <table style={{ width: '100%' }}>
+              <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', width: '100%' }}>
+                <table style={{ width: '100%', minWidth: '540px', borderCollapse: 'collapse' }}>
                 <thead>
                   <tr>
                     <th style={{ padding: '12px 24px', textAlign: 'left' }}>DUE DATE</th>
@@ -2501,6 +2500,7 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
                   </tr>
                 </tbody>
               </table>
+              </div>
             </div>
           )}
 

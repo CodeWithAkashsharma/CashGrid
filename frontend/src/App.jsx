@@ -10,6 +10,7 @@ function App() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasUnreadNotifs, setHasUnreadNotifs] = useState(localStorage.getItem('notifsRead') !== 'true');
   const [customerTab, setCustomerTab] = useState('Dashboard');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [globalModal, setGlobalModal] = useState({
     isOpen: false,
     title: '',
@@ -268,7 +269,7 @@ function App() {
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center', 
-            padding: '16px 40px', 
+            padding: 'clamp(12px, 2.5vw, 16px) clamp(14px, 4vw, 40px)', 
             background: 'linear-gradient(90deg, #0F172A 0%, #1E293B 100%)', 
             borderBottom: '1px solid rgba(255,255,255,0.05)',
             boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
@@ -278,9 +279,9 @@ function App() {
             backdropFilter: 'blur(10px)'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <img src="/logo.png" alt="CashGrid Logo" style={{ width: '40px', height: '40px', objectFit: 'contain', filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.2))' }} />
+              <img src="/logo.png" alt="CashGrid Logo" style={{ width: 'clamp(32px, 4vw, 40px)', height: 'clamp(32px, 4vw, 40px)', objectFit: 'contain', filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.2))' }} />
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span style={{ fontSize: '1.4rem', fontWeight: '800', letterSpacing: '0.5px', textShadow: '0 2px 4px rgba(0,0,0,0.3)', lineHeight: '1' }}>
+                <span style={{ fontSize: 'clamp(1.15rem, 3.5vw, 1.4rem)', fontWeight: '800', letterSpacing: '0.5px', textShadow: '0 2px 4px rgba(0,0,0,0.3)', lineHeight: '1' }}>
                   <span style={{ color: 'white' }}>Cash</span><span style={{ color: '#10B981' }}>Grid</span>
                 </span>
                 <span className="nav-tagline" style={{ fontSize: '0.55rem', color: '#94A3B8', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '4px' }}>Track • Collect • Recognise</span>
@@ -288,19 +289,19 @@ function App() {
             </div>
 
             {user && user.role === 'customer' && (
-              <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '12px', background: 'rgba(0,0,0,0.2)', padding: '8px 12px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <div className="desktop-customer-tabs">
                 {['Dashboard', 'Payments', 'History'].map(tab => (
                   <div 
                     key={tab}
                     onClick={() => setCustomerTab(tab)}
                     style={{
-                      padding: '8px 24px',
+                      padding: '8px 20px',
                       cursor: 'pointer',
                       color: 'white',
                       background: customerTab === tab ? '#10B981' : 'transparent',
                       borderRadius: '10px',
                       fontWeight: customerTab === tab ? '700' : '500',
-                      fontSize: '0.95rem',
+                      fontSize: '0.9rem',
                       letterSpacing: '0.5px',
                       transition: 'all 0.2s',
                       boxShadow: customerTab === tab ? '0 4px 12px rgba(16,185,129,0.4)' : 'none',
@@ -315,7 +316,74 @@ function App() {
               </div>
             )}
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {/* Mobile Drawer Dropdown for Customer Portal */}
+            {user && user.role === 'customer' && mobileMenuOpen && (
+              <div className="mobile-customer-drawer">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ fontSize: '0.72rem', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px', paddingLeft: '6px' }}>
+                    Customer Portal Menu
+                  </div>
+                  {[
+                    { name: 'Dashboard', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> },
+                    { name: 'Payments', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> },
+                    { name: 'History', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> }
+                  ].map(tab => (
+                    <button
+                      key={tab.name}
+                      onClick={() => { setCustomerTab(tab.name); setMobileMenuOpen(false); }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        gap: '10px',
+                        padding: '11px 16px',
+                        background: customerTab === tab.name ? '#10B981' : 'rgba(255,255,255,0.06)',
+                        color: 'white',
+                        borderRadius: '10px',
+                        fontWeight: customerTab === tab.name ? '700' : '500',
+                        fontSize: '0.92rem',
+                        border: 'none',
+                        cursor: 'pointer',
+                        width: '100%',
+                        transition: 'all 0.2s',
+                        boxShadow: customerTab === tab.name ? '0 4px 12px rgba(16,185,129,0.3)' : 'none'
+                      }}
+                    >
+                      {tab.icon}
+                      <span>{tab.name}</span>
+                      {customerTab === tab.name && (
+                        <span style={{ marginLeft: 'auto', fontSize: '0.75rem', background: 'rgba(255,255,255,0.25)', padding: '2px 8px', borderRadius: '12px' }}>Active</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {/* Burger Menu Button for Customer Portal */}
+              {user && user.role === 'customer' && (
+                <button
+                  type="button"
+                  className="mobile-burger-btn"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  aria-label="Toggle Menu"
+                  title="Menu"
+                >
+                  {mobileMenuOpen ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  ) : (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="3" y1="12" x2="21" y2="12"></line>
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                  )}
+                </button>
+              )}
 
               <div ref={notifRef} style={{ position: 'relative' }}>
                 <div 
