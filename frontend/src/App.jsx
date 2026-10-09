@@ -220,7 +220,7 @@ function App() {
 
   useEffect(() => {
     if (token) {
-      fetch('http://localhost:8000/api/auth/me/', {
+      fetch('https://akash999.pythonanywhere.com/api/auth/me/', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {

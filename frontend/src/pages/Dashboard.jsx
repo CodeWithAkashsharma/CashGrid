@@ -97,9 +97,9 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
     if (path.startsWith('http') || path.startsWith('blob:') || path.startsWith('data:')) return path;
     const cleanPath = path.startsWith('/') ? path : '/' + path;
     if (cleanPath.startsWith('/media/')) {
-      return `http://localhost:8000${cleanPath}`;
+      return `https://akash999.pythonanywhere.com${cleanPath}`;
     }
-    return `http://localhost:8000/media${cleanPath}`;
+    return `https://akash999.pythonanywhere.com/media${cleanPath}`;
   };
 
   const getEasyStatusBadge = (status) => {
@@ -344,28 +344,28 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
   ];
 
   const fetchDashboardData = () => {
-    fetch('http://localhost:8000/api/deposits/dashboard/', {
+    fetch('https://akash999.pythonanywhere.com/api/deposits/dashboard/', {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(data => setStats(data))
       .catch(console.error);
 
-    fetch('http://localhost:8000/api/collections/', {
+    fetch('https://akash999.pythonanywhere.com/api/collections/', {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(data => setCollections(Array.isArray(data) ? data : []))
       .catch(console.error);
 
-    fetch('http://localhost:8000/api/deposits/', {
+    fetch('https://akash999.pythonanywhere.com/api/deposits/', {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(data => setBankDeposits(Array.isArray(data) ? data : []))
       .catch(console.error);
 
-    fetch('http://localhost:8000/api/loans/', {
+    fetch('https://akash999.pythonanywhere.com/api/loans/', {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -397,7 +397,7 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
 
   const handleVerifyReceiptAtBranch = async (collectionId, amount) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/collections/${collectionId}/receive_at_branch/`, {
+      const res = await fetch(`https://akash999.pythonanywhere.com/api/collections/${collectionId}/receive_at_branch/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -464,7 +464,7 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
     formData.append('deposit_slip', bankDepositForm.slip_file);
 
     try {
-      const res = await fetch('http://localhost:8000/api/deposits/', {
+      const res = await fetch('https://akash999.pythonanywhere.com/api/deposits/', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -1476,7 +1476,7 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
       formData.append('receipt_image', collectionData.file);
     }
 
-    fetch('http://localhost:8000/api/collections/', {
+    fetch('https://akash999.pythonanywhere.com/api/collections/', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -2603,7 +2603,7 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
                 ? (previewSlipModal.data.receipt_image || (previewSlipModal.data.receipt_number ? `/media/receipts/rec_${String(previewSlipModal.data.id || '001').padStart(3, '0')}.jpg` : '/media/receipts/rec_001.jpg'))
                 : (previewSlipModal.data.deposit_slip || previewSlipModal.data.slip_preview || '/media/deposits/dep_sbi_881023.jpg');
 
-              const photoUrl = getSlipImageUrl(rawImg) || (isReceipt ? 'http://localhost:8000/media/receipts/rec_001.jpg' : 'http://localhost:8000/media/deposits/dep_sbi_881023.jpg');
+              const photoUrl = getSlipImageUrl(rawImg) || (isReceipt ? 'https://akash999.pythonanywhere.com/media/receipts/rec_001.jpg' : 'https://akash999.pythonanywhere.com/media/deposits/dep_sbi_881023.jpg');
 
               return (
                 <div style={{ background: '#0F172A', borderRadius: '12px', padding: '16px', marginBottom: '18px', textAlign: 'center', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)' }}>
@@ -2628,7 +2628,7 @@ function Dashboard({ token, user, customerTab, setCustomerTab }) {
                         border: '1px solid #334155'
                       }}
                       onError={(e) => {
-                        e.target.src = isReceipt ? 'http://localhost:8000/media/receipts/rec_001.jpg' : 'http://localhost:8000/media/deposits/dep_sbi_881023.jpg';
+                        e.target.src = isReceipt ? 'https://akash999.pythonanywhere.com/media/receipts/rec_001.jpg' : 'https://akash999.pythonanywhere.com/media/deposits/dep_sbi_881023.jpg';
                       }}
                     />
                   </div>
